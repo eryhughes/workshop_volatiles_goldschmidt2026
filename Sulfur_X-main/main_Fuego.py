@@ -86,7 +86,7 @@ sulfide_pre = 0
 S_Fe_choice = 1
 # log10fO2 tolerance. The value of this number may cause individual outliners in the fO2 calcuation. However, if sigma
 # is too small, it may cause the fault fO2 calculation
-sigma = 0.005
+sigma = 0.01
 
 # if crystallization is enabled, H2O-melt fraction relation is specified using H2O-K2O relation (K2O = a * H2O +b),
 # assuming K2O is perfectly incompatible. The given a and b are based on H2O-K2O relation for Fuego magam from
@@ -169,7 +169,7 @@ if COH_model == 1:  # if VolatileCalc is chosen
         f" The initial vapor saturation pressure is {P_initial} bar, and the initial vapor concentration is XH2O = {XH2Of_initial}"
         f" and XCO2 = {1 - XH2Of_initial}")
 else:  # if IaconoMarziano model is chosen
-    coh = IaconoMarziano(pressure=400, temperature_k=tk, composition=melt_comp_initial.composition,
+    coh = IaconoMarziano(pressure=100, temperature_k=tk, composition=melt_comp_initial.composition,
                          a=slope_h2o, b=constant_h2o)
     [P_initial, XH2Of_initial] = coh.saturation_pressure(CO2_initial, H2O_initial)  # P_initial in bar
     print(
@@ -183,6 +183,10 @@ def_variables = NewVariables(P_initial, l)
 my_data = def_variables.results_dic()
 # Dataframe to store the output results
 df_results = pd.DataFrame(data=my_data)
+# print(df_results["pressure"].head())
+# print(df_results["pressure"].tail())
+print("Final pressure =", df_results["pressure"].iloc[-1])
+
 # This dataframe will only be used if the monte-carlo simulation option is enabled.
 df_results_m = pd.DataFrame(data=my_data)
 
@@ -217,17 +221,17 @@ e_balance_initial = (S_initial / 10000) * (1 - rs_melt_initial) * 8 / 32.065 \
 print(f"The initial sulfate ratio in the melt is {rs_melt_initial}")
 
 #Check if the initial Fe3+/FeT and S6+/ST are appropriate
-while True:
-    answer = input("Are the initial Fe3+/FeT and S6+/ST reasonable? (y/n): ").strip().lower()
-    if answer in ["y", "n"]:
-        break
-    print("Please type 'y' or 'n'. If n, the run will stop and please adjust the initial input")
+# while True:
+#     answer = input("Are the initial Fe3+/FeT and S6+/ST reasonable? (y/n): ").strip().lower()
+#     if answer in ["y", "n"]:
+#         break
+#     print("Please type 'y' or 'n'. If n, the run will stop and please adjust the initial input")
 
-if answer == "n":
-    print("Run stopped by user.")
-    exit()
+# if answer == "n":
+#     print("Run stopped by user.")
+#     exit()
 
-print("Continuing with Sulfur_X")
+# print("Continuing with Sulfur_X")
 
 # define all the initial values in the results DF.
 df_results.iloc[0, df_results.columns.get_loc("SCSS")]=solubility.SCSS_smythe()
@@ -306,142 +310,142 @@ df_results.to_csv(file_path)
 # plot results
 
 # This figure is similar to Figure 6 in the text
-plt.figure(1)
-plt.subplot(2,2,1)
-plt.subplot(2, 2, 1)
-plt.plot(df_results["wS_melt"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="blue")
-plt.xlabel("S_melt (ppm)")
-plt.ylabel("Pressure (MPa)")
-# plt.xlim([0,3000])
-# plt.ylim([0, 300])
+# plt.figure(1)
+# plt.subplot(2,2,1)
+# plt.subplot(2, 2, 1)
+# plt.plot(df_results["wS_melt"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="blue")
+# plt.xlabel("S_melt (ppm)")
+# plt.ylabel("Pressure (MPa)")
+# # plt.xlim([0,3000])
+# # plt.ylim([0, 300])
 
-plt.subplot(2,2,2)
-plt.plot(df_results["SCSS_S6+"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="blue")
-plt.xlabel("SCSS")
-plt.ylabel("Pressure (MPa)")
+# plt.subplot(2,2,2)
+# plt.plot(df_results["SCSS_S6+"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="blue")
+# plt.xlabel("SCSS")
+# plt.ylabel("Pressure (MPa)")
+# # plt.xlim([0, 2])
+# # plt.ylim([0, 300])
+
+# plt.subplot(2,2,3)
+# plt.plot(df_results["sulfide_frac"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="blue")
+# plt.xlabel("sulfide_fraction")
+# plt.ylabel("Pressure (MPa)")
+# # plt.xlim([0, 2])
+# #plt.ylim([0, 300])
+
+# plt.subplot(2,2,4)
+# plt.plot(df_results["accvapor_fraction"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="blue")
+# plt.xlabel("vapor")
+# plt.ylabel("Pressure (MPa)")
+# # plt.xlim([0, 2])
+# #plt.ylim([0, 300])
+
+
+
+# # fO2 
+# plt.figure(2)
+# plt.subplot(3, 2, 1)
+# plt.plot(df_results["kd_RxnI"][0:m], df_results["pressure"][0:m], linestyle="--", linewidth=3)
+# # plt.plot(df_results["kd_RxnIa"][13:m], df_results["pressure"][13:m], linestyle="-.", linewidth=3)
+# plt.plot(df_results["kd_RxnII"][13:m], df_results["pressure"][13:m], linestyle=":", linewidth=3)
+# plt.plot(df_results["kd_combined_molar"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5, color="grey")
+# # plt.plot(df_results["kd_combined_wt"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5, color="yellow")
+# plt.xlim([0, 300])
+# plt.ylim([0, 400])
+# plt.legend(["kdrxn1", "kdrxn2", "kdcombined_molar"])
+# plt.xlabel("partition coefficients")
+# plt.ylabel("Pressure (MPa)")
+
+# plt.subplot(3, 2, 2)
+# plt.plot(np.log10(df_results["kd_combined_wt"][1:m]), df_results["pressure"][1:m], linestyle="-", linewidth=5, color="yellow")
+# plt.legend(["This model"])
+# plt.xlabel("Kd_wt")
+# plt.ylabel("Pressure (MPa)")
+# plt.xlim([0, 4])
+# plt.ylim([0, 700])
+
+# plt.subplot(3, 2, 3)
+# plt.plot(df_results["ferric_ratio"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="grey")
+# plt.plot(df_results["SO2/ST"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="blue")
+# plt.plot(df_results["S6+/ST"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="red")
+# plt.xlim([0, 1])
+# plt.ylim([0, 700])
+# plt.legend(["Fe3+/FeT", "SO2/STV", "S6+/ST"])
+# plt.xlabel("ratios")
+# plt.ylabel("Pressure (MPa)")
+
+# plt.subplot(3, 2, 4)
+# plt.plot(df_results["fO2"][13:m] - df_results["FMQ"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5,
+#          color="yellow")
+# plt.legend(["modeled dFMQ"])
+# plt.xlabel("dFMQ")
+# plt.ylabel("Pressure (MPa)")
 # plt.xlim([0, 2])
-# plt.ylim([0, 300])
+# plt.ylim([0, 700])
 
-plt.subplot(2,2,3)
-plt.plot(df_results["sulfide_frac"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="blue")
-plt.xlabel("sulfide_fraction")
-plt.ylabel("Pressure (MPa)")
-# plt.xlim([0, 2])
-#plt.ylim([0, 300])
+# plt.subplot(3, 2, 5)
+# plt.plot(np.log10(df_results["SO2_fugacity"][13:m]), df_results["pressure"][13:m], linestyle="-", linewidth=3,
+#          color="blue")
+# plt.plot(np.log10(df_results["H2S_fugacity"][13:m]), df_results["pressure"][13:m], linestyle="--", linewidth=2,
+#          color="blue")
+# plt.plot(np.log10(df_results["water_fugacity"][13:m]), df_results["pressure"][13:m], linestyle=":", linewidth=4,
+#          color="blue")
+# plt.legend(["fSO2", "fH2S", "fH2O"])
+# plt.xlabel("fugacity (bar)")
+# plt.ylabel("Pressure (MPa)")
+# plt.xlim([-2, 4])
+# plt.ylim([0, 700])
 
-plt.subplot(2,2,4)
-plt.plot(df_results["accvapor_fraction"][0:m], df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="blue")
-plt.xlabel("vapor")
-plt.ylabel("Pressure (MPa)")
-# plt.xlim([0, 2])
-#plt.ylim([0, 300])
-
-
-
-# fO2 
-plt.figure(2)
-plt.subplot(3, 2, 1)
-plt.plot(df_results["kd_RxnI"][0:m], df_results["pressure"][0:m], linestyle="--", linewidth=3)
-# plt.plot(df_results["kd_RxnIa"][13:m], df_results["pressure"][13:m], linestyle="-.", linewidth=3)
-plt.plot(df_results["kd_RxnII"][13:m], df_results["pressure"][13:m], linestyle=":", linewidth=3)
-plt.plot(df_results["kd_combined_molar"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5, color="grey")
-# plt.plot(df_results["kd_combined_wt"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5, color="yellow")
-plt.xlim([0, 300])
-plt.ylim([0, 400])
-plt.legend(["kdrxn1", "kdrxn2", "kdcombined_molar"])
-plt.xlabel("partition coefficients")
-plt.ylabel("Pressure (MPa)")
-
-plt.subplot(3, 2, 2)
-plt.plot(np.log10(df_results["kd_combined_wt"][1:m]), df_results["pressure"][1:m], linestyle="-", linewidth=5, color="yellow")
-plt.legend(["This model"])
-plt.xlabel("Kd_wt")
-plt.ylabel("Pressure (MPa)")
-plt.xlim([0, 4])
-plt.ylim([0, 700])
-
-plt.subplot(3, 2, 3)
-plt.plot(df_results["ferric_ratio"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="grey")
-plt.plot(df_results["SO2/ST"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="blue")
-plt.plot(df_results["S6+/ST"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="red")
-plt.xlim([0, 1])
-plt.ylim([0, 700])
-plt.legend(["Fe3+/FeT", "SO2/STV", "S6+/ST"])
-plt.xlabel("ratios")
-plt.ylabel("Pressure (MPa)")
-
-plt.subplot(3, 2, 4)
-plt.plot(df_results["fO2"][13:m] - df_results["FMQ"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=5,
-         color="yellow")
-plt.legend(["modeled dFMQ"])
-plt.xlabel("dFMQ")
-plt.ylabel("Pressure (MPa)")
-plt.xlim([0, 2])
-plt.ylim([0, 700])
-
-plt.subplot(3, 2, 5)
-plt.plot(np.log10(df_results["SO2_fugacity"][13:m]), df_results["pressure"][13:m], linestyle="-", linewidth=3,
-         color="blue")
-plt.plot(np.log10(df_results["H2S_fugacity"][13:m]), df_results["pressure"][13:m], linestyle="--", linewidth=2,
-         color="blue")
-plt.plot(np.log10(df_results["water_fugacity"][13:m]), df_results["pressure"][13:m], linestyle=":", linewidth=4,
-         color="blue")
-plt.legend(["fSO2", "fH2S", "fH2O"])
-plt.xlabel("fugacity (bar)")
-plt.ylabel("Pressure (MPa)")
-plt.xlim([-2, 4])
-plt.ylim([0, 700])
-
-plt.subplot(3, 2, 6)
-plt.plot(df_results["sulfate_m"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="red")
-plt.plot(df_results["sulfide_m"][13:m], df_results["pressure"][13:m], linestyle="--", linewidth=2, color="red")
-plt.plot(df_results["SO2_f"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="blue")
-plt.plot(df_results["H2S_f"][13:m], df_results["pressure"][13:m], linestyle="--", linewidth=2, color="blue")
-plt.legend(["S6+", "S2-", "SO2", "H2S"])
-plt.xlim([0, 0.01])
-plt.ylim([0, 700])
-plt.xlabel("moles")
-plt.ylabel("Pressure (MPa)")
+# plt.subplot(3, 2, 6)
+# plt.plot(df_results["sulfate_m"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="red")
+# plt.plot(df_results["sulfide_m"][13:m], df_results["pressure"][13:m], linestyle="--", linewidth=2, color="red")
+# plt.plot(df_results["SO2_f"][13:m], df_results["pressure"][13:m], linestyle="-", linewidth=3, color="blue")
+# plt.plot(df_results["H2S_f"][13:m], df_results["pressure"][13:m], linestyle="--", linewidth=2, color="blue")
+# plt.legend(["S6+", "S2-", "SO2", "H2S"])
+# plt.xlim([0, 0.01])
+# plt.ylim([0, 700])
+# plt.xlabel("moles")
+# plt.ylabel("Pressure (MPa)")
 
 # S and Kd
-plt.figure(3)
-plt.subplot(1, 2, 1)
-plt.plot(df_results["wS_melt"][0:m], df_results["pressure"][0:m], linestyle='-', linewidth=2)
-plt.xlabel("S_melt (ppm)")
-plt.ylabel("Pressure (MPa)")
-# plt.xlim([200, 1600])
-# plt.ylim([0, 700])
+# plt.figure(3)
+# plt.subplot(1, 2, 1)
+# plt.plot(df_results["wS_melt"][0:m], df_results["pressure"][0:m], linestyle='-', linewidth=2)
+# plt.xlabel("S_melt (ppm)")
+# plt.ylabel("Pressure (MPa)")
+# # plt.xlim([200, 1600])
+# # plt.ylim([0, 700])
 
-plt.subplot(1, 2, 2)
-plt.plot(np.log10(df_results["kd_RxnI"][0:m]), df_results["pressure"][0:m], linestyle="--", linewidth=3)
-# plt.plot(np.log10(df_results["kd_RxnIa"][0:m]), df_results["pressure"][0:m], linestyle="-.", linewidth=3)
-plt.plot(np.log10(df_results["kd_RxnII"][0:m]), df_results["pressure"][0:m], linestyle=":", linewidth=3)
-plt.plot(np.log10(df_results["kd_combined_molar"][0:m]), df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="grey")
-plt.plot(np.log10(df_results["kd_combined_wt"][0:m]), df_results["pressure"][0:m], linestyle="-", linewidth=5,
-         color="black")
-# plt.xlim([-2, 5])
-# plt.ylim([0, 700])
-plt.legend(["kdrxn1", "kdrxn2", "kdcombined_molar", "kdcombined_wt"])
-plt.xlabel("partition coefficients (log10)")
-plt.ylabel("Pressure (MPa)")
+# plt.subplot(1, 2, 2)
+# plt.plot(np.log10(df_results["kd_RxnI"][0:m]), df_results["pressure"][0:m], linestyle="--", linewidth=3)
+# # plt.plot(np.log10(df_results["kd_RxnIa"][0:m]), df_results["pressure"][0:m], linestyle="-.", linewidth=3)
+# plt.plot(np.log10(df_results["kd_RxnII"][0:m]), df_results["pressure"][0:m], linestyle=":", linewidth=3)
+# plt.plot(np.log10(df_results["kd_combined_molar"][0:m]), df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="grey")
+# plt.plot(np.log10(df_results["kd_combined_wt"][0:m]), df_results["pressure"][0:m], linestyle="-", linewidth=5,
+#          color="black")
+# # plt.xlim([-2, 5])
+# # plt.ylim([0, 700])
+# plt.legend(["kdrxn1", "kdrxn2", "kdcombined_molar", "kdcombined_wt"])
+# plt.xlabel("partition coefficients (log10)")
+# plt.ylabel("Pressure (MPa)")
 
-#S vs. d34S
-plt.figure(6)
+# #S vs. d34S
+# plt.figure(6)
 
-plt.plot(df_results["wS_melt"][0:m], df_results["d34s_fluid"][0:m], linestyle='-', linewidth=2)
-plt.xlabel("S_melt (ppm)")
-plt.ylabel("d34S")
+# plt.plot(df_results["wS_melt"][0:m], df_results["d34s_fluid"][0:m], linestyle='-', linewidth=2)
+# plt.xlabel("S_melt (ppm)")
+# plt.ylabel("d34S")
 
-plt.figure(5)
+# plt.figure(5)
 
-plt.plot(df_results["accCO2_S"][1:m], df_results["pressure"][1:m], linestyle='-', linewidth=2)
-plt.xlabel("CO2/S_vapor")
-plt.ylabel("Pressure (MPa)")
+# plt.plot(df_results["accCO2_S"][1:m], df_results["pressure"][1:m], linestyle='-', linewidth=2)
+# plt.xlabel("CO2/S_vapor")
+# plt.ylabel("Pressure (MPa)")
 df_results_avg = df_results.copy()
 # plt.savefig(folder/"Sulfur_Xmodel_gas.png")
 ##############################################################################
@@ -497,7 +501,7 @@ plt.plot(df_results["wH2O_melt"][0:m], df_results["wS_melt"][0:m])
 
 for i in range(1, m_run):
     plt.plot(df_S_m.iloc[:, i],df_results["wH2O_melt"])
-plt.plot(df["mi_H2O"], df["mi_S"],  "o")
+# plt.plot(df["mi_H2O"], df["mi_S"],  "o")
 plt.legend(["Sulfur_X", "Spurr MIs"])
 plt.xlabel("H2O_melt (wt.%)")
 plt.ylabel("S_melt (ppm)")
@@ -539,7 +543,7 @@ ax.text(
 plt.plot(df_results_avg["accCO2_S"][1:m], df_results_avg["pressure"][1:m], linestyle='-', linewidth=2)
 ax.set_xlabel("CO$_2$/S$_{\\mathrm{vapor}}$")
 ax.set_ylabel("Pressure (MPa)")
-ax.set_xlim(0, 60)
+# ax.set_xlim(0, 60)
 
 ax.grid(True, alpha=0.3)
 
@@ -551,42 +555,42 @@ x = df_S_m["mean"].values
 y = df_results_avg["wCO2_melt"].values
 std = df_S_m["std"].values
 
-fig2, ax2 = plt.subplots(figsize=(6,5))
+# fig2, ax2 = plt.subplots(figsize=(6,5))
 
 
-# Plot shaded region for each point
-for xi, yi, si in zip(x, y, std):
-    ax2.fill_betweenx(
-        [yi - 0.5, yi + 0.5],  # small vertical thickness, adjust as needed
-        xi - si,
-        xi + si,
-        color="tab:blue",
-        alpha=0.08,
-        linewidth=0
-    )
-# vertical line at x=1
-# ax2.axvline(1, color='k', linestyle='--', lw=1)
+# # Plot shaded region for each point
+# for xi, yi, si in zip(x, y, std):
+#     ax2.fill_betweenx(
+#         [yi - 0.5, yi + 0.5],  # small vertical thickness, adjust as needed
+#         xi - si,
+#         xi + si,
+#         color="tab:blue",
+#         alpha=0.08,
+#         linewidth=0
+#     )
+# # vertical line at x=1
+# # ax2.axvline(1, color='k', linestyle='--', lw=1)
 
-# invert y-axis
-# ax2.invert_yaxis()
-# ax2.text(
-#     1.02,                    # x-position (slightly right of the line)
-#     0.1 * (ax.get_ylim()[0] + ax.get_ylim()[1]),   # mid-y position
-#     r"CO$_2$/S$_{\mathrm{measured}}$ = 1",
-#     va="center",
-#     ha="left",
-#     fontsize=12
-# )
-plt.plot(df_results_avg["wS_melt"][0:m], df_results_avg["wCO2_melt"][0:m], linestyle='-', linewidth=2)
-ax2.set_xlabel("S (ppm)")
-ax2.set_ylabel("CO$_2$ (ppm)")
-# ax2.set_xlim(0, 40)
+# # invert y-axis
+# # ax2.invert_yaxis()
+# # ax2.text(
+# #     1.02,                    # x-position (slightly right of the line)
+# #     0.1 * (ax.get_ylim()[0] + ax.get_ylim()[1]),   # mid-y position
+# #     r"CO$_2$/S$_{\mathrm{measured}}$ = 1",
+# #     va="center",
+# #     ha="left",
+# #     fontsize=12
+# # )
+# plt.plot(df_results_avg["wS_melt"][0:m], df_results_avg["wCO2_melt"][0:m], linestyle='-', linewidth=2)
+# ax2.set_xlabel("S (ppm)")
+# ax2.set_ylabel("CO$_2$ (ppm)")
+# # ax2.set_xlim(0, 40)
 
-ax2.grid(True, alpha=0.3)
+# ax2.grid(True, alpha=0.3)
 
-plt.tight_layout()
-plt.savefig(folder/"Sulfur_Xmodel_SCO2_int_open.png")
-fig.savefig(folder/"Sulfur_Xmodel_SCO2_int_open.eps", format = "eps", dpi=300, bbox_inches="tight")
-#plot.show()
+# plt.tight_layout()
+# plt.savefig(folder/"Sulfur_Xmodel_SCO2_int_open.png")
+# fig.savefig(folder/"Sulfur_Xmodel_SCO2_int_open.eps", format = "eps", dpi=300, bbox_inches="tight")
+plt.show()
 
 
