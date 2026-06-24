@@ -13,7 +13,7 @@ total steps of pressure,1000.0
 total numbers of runs,1000.0
 Pressure (MPa) open degassings tarts,0.0
 S_Fe speciation model,1.0
-log10fO2 tolerence,0.005
+log10fO2 tolerence,0.01
 H2O-K2O slope for crystallization,-0.713
 H2O constant for crystallization,3.689
 Run until in bar,0.0
