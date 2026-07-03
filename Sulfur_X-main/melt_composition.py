@@ -74,15 +74,15 @@ class MeltComposition:
             # tio2 = 1.01 / melt_fraction
 
             # Fuego_comparison paper
-            sio2 = 50.1 / melt_fraction
-            al2o3 = 13.54 / melt_fraction
-            feot = 11.34 / melt_fraction
-            mgo = 7.75 / melt_fraction
-            cao = 10.32 / melt_fraction
+            sio2 = 39.26 / melt_fraction
+            al2o3 = 0.03 / melt_fraction
+            feot = 17.08 / melt_fraction
+            mgo = 42.57 / melt_fraction
+            cao = 0.24 / melt_fraction
             na2o = 2.65 / melt_fraction
             k2o = 0.5 / melt_fraction
             p2o5 = 0.16 / melt_fraction
-            mno = 0.22 / melt_fraction
+            mno = 0.23 / melt_fraction
             tio2 = 2.97 / melt_fraction
 
             # Mt Spurr

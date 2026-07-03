@@ -1,0 +1,22 @@
+name: volatiles-gs-workshop26
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - matplotlib
+  - pandas
+  - ipykernel
+  - numpy
+  - scipy
+  - statsmodels
+  - scikit-learn
+  - pip
+  - pip:
+    - vesical
+    - diadfit
+    - volfe
+    - thermobar
+    - pandas
+    - matplotlib
+    - git+https://github.com/pipliggins/EVo.git
