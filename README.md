@@ -9,4 +9,4 @@ These exercises include calculating pressures and fluid compositions from melt a
 - [Thermobar](https://thermobar.readthedocs.io/en/latest/) - [Wieser et al. (2021)](https://doi.org/10.30909/vol.05.02.349384)
 - [VESIcal](https://vesical.readthedocs.io/en/latest/) - [Iacovino et al. (2021)](https://doi.org/10.1029/2020EA001584)
 - [VICTOR](https://docs.victorproject.org/en/latest/index.html) - [Lev et al. (2025)](https://doi.org/10.30909/vol/ikoj4933)
-- [VolFe](https://volfe.readthedocs.io/en/latest/)- [Hughes et al. (2025)](https://doi.org/10.30909/vol/imvc1781)
+- [VolFe](https://volfe.readthedocs.io/en/latest/) - [Hughes et al. (2025)](https://doi.org/10.30909/vol/imvc1781)
