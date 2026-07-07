@@ -30,16 +30,16 @@ from tqdm import tqdm
 ###############################################################################
 # Input of all the initial conditions
 # Melt compositions need to be changed in the melt_composition.py file
-temperature = 1169.775
+temperature = 1163
 # fO2 relative to FMQ buffer; if redox evolution is enabled, this is the initial fO2 at the initial P and T; if redox
 # evolution is disabled, the degassing would be buffered at this delta_FMQ
 delta_FMQ = 0.2
 # initial H2O in wt.%
 H2O_initial = 0.5
 # initial CO2 in ppm
-CO2_initial = 1405.0
+CO2_initial = 403
 # initial S in ppm
-S_initial = 975.9054348
+S_initial = 1163.54223422728
 # initial d34s in the melt
 d34s_m_initial = 1
 # Crystallization or not? If 1, crystallization is enabled; if 0, crystallization disabled
@@ -100,7 +100,7 @@ constant_h2o = 3.689
 # MI data and output csv file
 # Read melt inclusion data that needs to be compared with the model results
 # All the file have to be csv files with the format as in the example; file names need to end in ".csv"
-mi_name = 'Sulfur_X-main/Fuego.csv'
+mi_name = 'Sulfur_X-main/Kilauea.csv'
 df = pd.read_csv(mi_name)
 
 # Define folder and file
