@@ -1,6 +1,6 @@
 # Modelling the Behaviour of Volatiles in Magmas workshop at Goldschmidt 2026
 
-This is a repository for the [workshop](https://kaylai.github.io/GS2026-volatiles-workshop/) run as part of Goldschmidt 2026 in July 2027.
+This is a repository for the [workshop](https://kaylai.github.io/GS2026-volatiles-workshop/) run as part of Goldschmidt 2026 in July 2026.
 
 These exercises include calculating pressures and fluid compositions from melt and fluid inclusion data, as well as degassing paths using various tools on the VICTOR platform or locally:
 - [DiadFit](https://diadfit.readthedocs.io/en/latest/) - [Wieser et al. (2024)](https://doi.org/10.30909/vol.07.01.335359)
