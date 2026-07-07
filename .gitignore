@@ -32,7 +32,8 @@ Thumbs.db
 
 # Data (adjust as needed)
 # add user-generated results file dirs, keep only an "answer key"
-output/
+output/*
+!output/.gitkeep
 
 # Secrets
 .env
