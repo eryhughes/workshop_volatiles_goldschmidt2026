@@ -30,13 +30,20 @@ Thumbs.db
 .idea/
 *.code-workspace
 
-# Data (adjust as needed)
 # add user-generated results file dirs, keep only an "answer key"
 output/*
 !output/.gitkeep
+
+# EVo outputs to root
+results_gassing_chemistry.csv
+results_jacnewton3.csv
+results_saturation_pressures.csv
 
 # Secrets
 .env
 *.env
 secrets.py
 config.py
+Sulfur_X-main/Kilauea.csv
+Sulfur_X-main/results_folder/test_Fuego_closedT1163_dFMQ0.2_H2O0.5_CO2403_fO2track_initial.csv
+Sulfur_X-main/results_folder/test_Fuego_closedT1163_dFMQ0.2_H2O0.5_CO2403_fO2track.csv
